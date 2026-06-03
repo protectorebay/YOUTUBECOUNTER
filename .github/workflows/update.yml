@@ -1,43 +1,41 @@
 name: Update Dashboard
 
 on:
-schedule:
-- cron: '*/5 * * * *'
-workflow_dispatch:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
 
 permissions:
-contents: write
+  contents: write
 
 jobs:
-update:
-runs-on: ubuntu-latest
+  update:
+    runs-on: ubuntu-latest
 
-```
-steps:
-  - name: Checkout
-    uses: actions/checkout@v4
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-  - name: Setup Python
-    uses: actions/setup-python@v5
-    with:
-      python-version: '3.11'
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
-  - name: Install requirements
-    run: pip install -r requirements.txt
+      - name: Install requirements
+        run: pip install -r requirements.txt
 
-  - name: Run script
-    env:
-      YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
-    run: python update.py
+      - name: Run script
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: python update.py
 
-  - name: Commit dashboard
-    run: |
-      git config --global user.name "github-actions"
-      git config --global user.email "github-actions@github.com"
+      - name: Commit dashboard
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
 
-      git add dashboard.html
+          git add dashboard.html
 
-      git diff --staged --quiet || git commit -m "Update dashboard"
+          git diff --staged --quiet || git commit -m "Update dashboard"
 
-      git push
-```
+          git push
